@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260bec2809ba28f4eac1ea287d80f348, type: 3}
+  m_Name: basic2
+  m_EditorClassIdentifier: 
+  amplitude: 0.15
+  frequency: 1.2
+  octaves: 3
+  xPhase: 0.69
+  yPhase: 0.38
+  persistance: 0.081
+  lacunarity: 2.35
+  terrace: 0.015
+  cube: 0.001
