@@ -13,19 +13,20 @@ public class VoronoiNoise : MonoBehaviour
 
     public float sphereHeight = 500;
 
-    List<Vector2> currentPoints = new();
+    public List<Vector3> currentPoints = new();
 
     public bool randomizePoints;
 
-    List<Vector2> GenerateRandomPoints()
+    List<Vector3> GenerateRandomPoints()
     {
-        List<Vector2> points = new List<Vector2>();
+        List<Vector3> points = new List<Vector3>();
 
         for (int i = 0; i < numberOfPoints; i++)
         {
             float x = Random.Range(minX, maxX);
             float y = Random.Range(minY, maxY);
-            points.Add(new Vector2(x, y));
+            float z = Random.Range(0,4);
+            points.Add(new Vector3(x, y, z));
         }
 
         return points;
