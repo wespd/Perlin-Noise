@@ -1,10 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class PaintSolidColor : MonoBehaviour
 {
     public Terrain terrain;
 
     public VoronoiNoise vNoise;
+
+    public float blendDistance;
     void Start () {      
         // Get a reference to the terrain data
         TerrainData terrainData = terrain.terrainData;
@@ -20,23 +24,36 @@ public class PaintSolidColor : MonoBehaviour
                 float distance = 999;
                 float res = terrainData.heightmapResolution;
                 Vector3 size = terrainData.size;
-                int closestPoint = 999;
-                for(int i = 0; i < vNoise.currentPoints.Count; i ++)
+                List<Vector3> sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x / (res-1) * size.x,y / (res-1) * size.x, v.z))).ToList();
+                /*for(int i = 0; i < vNoise.currentPoints.Count; i ++)
                 {
                     Vector2 convertedLocation = new Vector2(vNoise.currentPoints[i].x * ((res-1) / size.x), vNoise.currentPoints[i].y * ((res-1) / size.x));
                     float currentDistance = Vector2.Distance(convertedLocation, new Vector2(x,y));
                     if(currentDistance < distance)
                     {
                         distance = currentDistance;
+                        secondClosestPoint = closestPoint;
                         closestPoint = i;
                     }
-                }
-                int colorOfPoint = (int)vNoise.currentPoints[closestPoint].z;
+                }*/
+               
+                int colorOfPoint = (int)sortedList[0].z;
+                int colorOfSecondPoint = (int)sortedList[1].z;
                 for(int i = 0; i < terrainData.alphamapLayers; i ++)
                 {
                     splatmapData[x,y,i] = 0;
                 }
-                splatmapData[x,y,colorOfPoint] = 1f;
+                if(Vector2.Distance(sortedList[0], sortedList[1]) < blendDistance)
+                {
+                    splatmapData[x,y,colorOfPoint] = .5f;
+                    splatmapData[x,y,colorOfSecondPoint] = .5f;
+
+                }
+                else
+                {
+                    splatmapData[x,y,colorOfPoint] = 1f;
+                }
+                
 
 
 

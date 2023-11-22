@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VoronoiNoise : MonoBehaviour
 {
-    [Range(50,1000)]
+    [Range(5,50)]
     public int numberOfPoints;
     public float minX = 0f;
     public float maxX = 10f;
