@@ -109,6 +109,10 @@ public class PerlinNoise : MonoBehaviour
     public bool createAsset;
     public string name;
 
+    public PaintSolidColor painter;
+
+    public bool changeColor;
+
     private void OnValidate()
     {
         int bounds = terrain.terrainData.heightmapResolution;
@@ -147,6 +151,11 @@ public class PerlinNoise : MonoBehaviour
             
             AssetDatabase.CreateAsset(asset, $"Assets/{name}.asset");
             AssetDatabase.SaveAssets();
+        }
+        if(changeColor)
+        {
+            changeColor = false;
+            painter.SetColors();
         }
     }
     

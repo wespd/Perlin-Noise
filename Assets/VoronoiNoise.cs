@@ -36,7 +36,8 @@ public class VoronoiNoise : MonoBehaviour
         Gizmos.color = Color.red;
         for(int i =  0; i < currentPoints.Count; i++)
         {
-            Gizmos.DrawSphere(new Vector3(currentPoints[i].x, sphereHeight, currentPoints[i].y), 10f);
+            //(x / (res-1) * size.x,y / (res-1) * size.x
+            Gizmos.DrawSphere(new Vector3(currentPoints[i].x/maxX*1000, sphereHeight, currentPoints[i].y/maxY*1000), 10f);
         }
     }
     void OnValidate()

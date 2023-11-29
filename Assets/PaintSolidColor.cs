@@ -9,7 +9,7 @@ public class PaintSolidColor : MonoBehaviour
     public VoronoiNoise vNoise;
 
     public float blendDistance;
-    void Start () {      
+    public void SetColors () {      
         // Get a reference to the terrain data
         TerrainData terrainData = terrain.terrainData;
 
@@ -24,18 +24,7 @@ public class PaintSolidColor : MonoBehaviour
                 float distance = 999;
                 float res = terrainData.heightmapResolution;
                 Vector3 size = terrainData.size;
-                List<Vector3> sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x / (res-1) * size.x,y / (res-1) * size.x, v.z))).ToList();
-                /*for(int i = 0; i < vNoise.currentPoints.Count; i ++)
-                {
-                    Vector2 convertedLocation = new Vector2(vNoise.currentPoints[i].x * ((res-1) / size.x), vNoise.currentPoints[i].y * ((res-1) / size.x));
-                    float currentDistance = Vector2.Distance(convertedLocation, new Vector2(x,y));
-                    if(currentDistance < distance)
-                    {
-                        distance = currentDistance;
-                        secondClosestPoint = closestPoint;
-                        closestPoint = i;
-                    }
-                }*/
+                List<Vector3> sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x,y, v.z))).ToList();
                
                 int colorOfPoint = (int)sortedList[0].z;
                 int colorOfSecondPoint = (int)sortedList[1].z;
@@ -43,69 +32,18 @@ public class PaintSolidColor : MonoBehaviour
                 {
                     splatmapData[x,y,i] = 0;
                 }
-                if(Vector2.Distance(sortedList[0], sortedList[1]) < blendDistance)
+                float distanceBetweenClosestPoints = Vector3.Distance(new Vector3(sortedList[1].x, sortedList[1].y, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(sortedList[0].x, sortedList[0].y, 0), new Vector3(x, y, 0));
+                if(sortedList[0].z != sortedList[1].z && distanceBetweenClosestPoints < blendDistance)
                 {
-                    splatmapData[x,y,colorOfPoint] = .5f;
-                    splatmapData[x,y,colorOfSecondPoint] = .5f;
+                    float blendStrength = distanceBetweenClosestPoints/(blendDistance*2) + .5f;
+                    splatmapData[x,y,colorOfPoint] = blendStrength;
+                    splatmapData[x,y,colorOfSecondPoint] = 1 - blendStrength;
 
                 }
                 else
                 {
                     splatmapData[x,y,colorOfPoint] = 1f;
                 }
-                
-
-
-
-                // Normalise x/y coordinates to range 0-1 
-                /*float y_01 = (float)y/(float)terrainData.alphamapHeight;
-                float x_01 = (float)x/(float)terrainData.alphamapWidth;
-                    
-                // Sample the height at this location (note GetHeight expects int coordinates corresponding to locations in the heightmap array)
-                float height = terrainData.GetHeight(Mathf.RoundToInt(y_01 * terrainData.heightmapHeight),Mathf.RoundToInt(x_01 * terrainData.heightmapWidth) );
-                    
-                // Calculate the normal of the terrain (note this is in normalised coordinates relative to the overall terrain dimensions)
-                Vector3 normal = terrainData.GetInterpolatedNormal(y_01,x_01);
-        
-                // Calculate the steepness of the terrain
-                float steepness = terrainData.GetSteepness(y_01,x_01);
-                    
-                // Setup an array to record the mix of texture weights at this point
-                float[] splatWeights = new float[terrainData.alphamapLayers];
-                    
-                // CHANGE THE RULES BELOW TO SET THE WEIGHTS OF EACH TEXTURE ON WHATEVER RULES YOU WANT
-        
-                // Texture[0] has constant influence
-                splatWeights[0] = 0.5f;
-                    
-                // Texture[1] is stronger at lower altitudes
-                splatWeights[1] = Mathf.Clamp01((terrainData.heightmapHeight - height));
-                    
-                // Texture[2] stronger on flatter terrain
-                // Note "steepness" is unbounded, so we "normalise" it by dividing by the extent of heightmap height and scale factor
-                // Subtract result from 1.0 to give greater weighting to flat surfaces
-                splatWeights[2] = 1.0f - Mathf.Clamp01(steepness*steepness/(terrainData.heightmapHeight/5.0f));
-                    
-                // Texture[3] increases with height but only on surfaces facing positive Z axis 
-                splatWeights[3] = height * Mathf.Clamp01(normal.z);
-                    
-                // Sum of all textures weights must add to 1, so calculate normalization factor from sum of weights
-                float z = 0;
-                for(int i = 0; i < splatWeights.Length; i ++)
-                {
-                    z += splatWeights[i];
-                }
-                    
-                // Loop through each terrain texture
-                for(int i = 0; i<terrainData.alphamapLayers; i++)
-                {
-                        
-                    // Normalize so that sum of all texture weights = 1
-                    splatWeights[i] /= z;
-                        
-                    // Assign this point to the splatmap array
-                    splatmapData[x, y, i] = splatWeights[i];
-                }*/
             }
         }
         
