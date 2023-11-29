@@ -28,6 +28,15 @@ public class PaintSolidColor : MonoBehaviour
                
                 int colorOfPoint = (int)sortedList[0].z;
                 int colorOfSecondPoint = (int)sortedList[1].z;
+                int[] distancesRelativeToClosestPoint;
+                distancesRelativeToClosestPoint.Add(1);
+                for(int i = 1; i < sortedList.Count; i++)
+                {
+                    if((Vector3.Distance(new Vector3(sortedList[i].x, sortedList[i].y, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(sortedList[0].x, sortedList[0].y, 0), new Vector3(x, y, 0))) < blendDistance)
+                    {
+                        distancesRelativeToClosestPoint.Add(i);
+                    }
+                }
                 for(int i = 0; i < terrainData.alphamapLayers; i ++)
                 {
                     splatmapData[x,y,i] = 0;
