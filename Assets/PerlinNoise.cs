@@ -79,6 +79,7 @@ public class PerlinNoise : MonoBehaviour
         }
         return lacunarity;
     }}
+    public biome[] biomes;
     
     public float[,] perlinHeights;
     public Terrain terrain;
@@ -117,7 +118,7 @@ public class PerlinNoise : MonoBehaviour
     {
         int bounds = terrain.terrainData.heightmapResolution;
         perlinHeights = new float[bounds,bounds];
-        for(int x = 0; x < bounds; x++)
+        /*for(int x = 0; x < bounds; x++)
         {
             for(int y = 0; y < bounds; y++)
             {
@@ -135,8 +136,8 @@ public class PerlinNoise : MonoBehaviour
                 
                 perlinHeights[x,y] =  perlinValue - (perlinValue % _terrace);
             }
-        }
-        terrain.terrainData.SetHeights(0,0, perlinHeights);
+        }*/
+        //terrain.terrainData.SetHeights(0,0, perlinHeights);
         if(createAsset)
         {
             createAsset = false;
@@ -157,6 +158,57 @@ public class PerlinNoise : MonoBehaviour
             changeColor = false;
             painter.SetColors();
         }
+        Debug.Log("set hieghts");
+        for(int x = 0; x < bounds; x++)
+        {
+            for(int y = 0; y < bounds; y++)
+            {
+                float perlinValue = 0;
+                int indexValue = (int)GetBiomeIndex(painter.splatmapData, x,y);
+                float __amplitude = biomes[indexValue].amplitude;
+                float __frequency= biomes[indexValue].frequency;
+                for(int octave = 0; octave < biomes[indexValue].octaves; octave++)
+                {
+                    float xCord = (x/(float)bounds*__frequency) + _xPhase;
+                    float yCord = (y/(float)bounds*__frequency) + _yPhase;
+                    __frequency *= biomes[indexValue].lacunarity;
+                    perlinValue += Mathf.PerlinNoise(xCord - xCord % biomes[indexValue].cube,yCord - yCord % biomes[indexValue].cube)*__amplitude;
+                    __amplitude *= biomes[indexValue].persistance;
+                }
+                
+                perlinHeights[x,y] =  perlinValue - (perlinValue % biomes[indexValue].terrace);
+            }
+        }
+        terrain.terrainData.SetHeights(0,0, perlinHeights);
     }
+    public float GetBiomeIndex(float[,,] list, int x, int y)
+    {
+
+        float highest = 0;
+        float returnValueIndex = 0;
+        int convertedX = x/1000*512;
+        int convertedY = y/1000*512;
+        /*if(convertedX >= list.GetLength(0) || convertedY >= list.GetLength(1))
+        {
+            Debug.Log(convertedX + " " + convertedY);
+        }
+        for(int i = 0; i < biomes.Length; i++)
+        {
+            if(list[convertedX,convertedY,i] > highest)
+            {
+                highest = list[convertedX,convertedY,i];
+                returnValueIndex = i;
+            }
+            if(x == 0)
+            {
+                Debug.Log(list[convertedX,convertedY,i] + " " + i);
+            }
+            //returnValue += list[x,y,i]*i;
+        }*/
+        //we need to make a list that takes an x and y and stores the biome value in the painter script
+        return painter.sortedList[0].z;
+        return returnValueIndex;
+    }
+    
     
 }

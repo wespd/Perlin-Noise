@@ -9,13 +9,19 @@ public class PaintSolidColor : MonoBehaviour
     public VoronoiNoise vNoise;
 
     public float blendDistance;
-    public void SetColors () {      
-        // Get a reference to the terrain data
-        TerrainData terrainData = terrain.terrainData;
+    
+    public TerrainData terrainData => terrain.terrainData;
 
+    // Splatmap data is stored internally as a 3d array of floats, so declare a new empty array ready for your custom splatmap data:
+    public float[, ,] splatmapData = null;
+
+
+    public List<Vector3> sortedList = new();
+    public void SetColors () {      
+        // Get a reference to the terrain dat
         // Splatmap data is stored internally as a 3d array of floats, so declare a new empty array ready for your custom splatmap data:
-        float[, ,] splatmapData = new float[terrainData.alphamapWidth, terrainData.alphamapHeight, terrainData.alphamapLayers];
-            
+        splatmapData = new float[terrainData.alphamapWidth, terrainData.alphamapHeight, terrainData.alphamapLayers];
+        Debug.Log("set colors ran");
         for (int y = 0; y < terrainData.alphamapHeight; y++)
         {
             for (int x = 0; x < terrainData.alphamapWidth; x++)
@@ -24,19 +30,19 @@ public class PaintSolidColor : MonoBehaviour
                 float distance = 999;
                 float res = terrainData.heightmapResolution;
                 Vector3 size = terrainData.size;
-                List<Vector3> sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x,y, v.z))).ToList();
+                sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x,y, v.z))).ToList();
                
                 int colorOfPoint = (int)sortedList[0].z;
                 int colorOfSecondPoint = (int)sortedList[1].z;
                 int[] distancesRelativeToClosestPoint;
-                distancesRelativeToClosestPoint.Add(1);
+                /*distancesRelativeToClosestPoint.Add(1);
                 for(int i = 1; i < sortedList.Count; i++)
                 {
                     if((Vector3.Distance(new Vector3(sortedList[i].x, sortedList[i].y, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(sortedList[0].x, sortedList[0].y, 0), new Vector3(x, y, 0))) < blendDistance)
                     {
                         distancesRelativeToClosestPoint.Add(i);
                     }
-                }
+                }*/
                 for(int i = 0; i < terrainData.alphamapLayers; i ++)
                 {
                     splatmapData[x,y,i] = 0;
@@ -52,6 +58,10 @@ public class PaintSolidColor : MonoBehaviour
                 else
                 {
                     splatmapData[x,y,colorOfPoint] = 1f;
+                }
+                if(x == 0)
+                {
+                    Debug.Log(splatmapData[x,y,colorOfPoint] + " " + colorOfPoint);
                 }
             }
         }
