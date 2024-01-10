@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260bec2809ba28f4eac1ea287d80f348, type: 3}
   m_Name: basic2
   m_EditorClassIdentifier: 
-  amplitude: 0.15
-  frequency: 1.2
+  amplitude: 0.05
+  frequency: 3
   octaves: 3
-  xPhase: 0.69
-  yPhase: 0.38
-  persistance: 0.081
-  lacunarity: 2.35
-  terrace: 0.015
+  xPhase: 1
+  yPhase: 1
+  persistance: 0.5
+  lacunarity: 5
+  terrace: 0.001
   cube: 0.001

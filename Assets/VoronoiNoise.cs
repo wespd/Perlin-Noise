@@ -25,7 +25,7 @@ public class VoronoiNoise : MonoBehaviour
         {
             float x = Random.Range(minX, maxX);
             float y = Random.Range(minY, maxY);
-            float z = Random.Range(0,4);
+            int z = Random.Range(0,4);
             points.Add(new Vector3(x, y, z));
         }
 

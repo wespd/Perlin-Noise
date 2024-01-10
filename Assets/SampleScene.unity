@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   values: {fileID: 11400000, guid: ca227195b58035342bc8bda36db48333, type: 2}
   useBiome: 0
-  amplitude: 0.269
+  amplitude: 0.348
   frequency: 6.4
   octaves: 6
   xPhase: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   biomes:
   - {fileID: 11400000, guid: ca227195b58035342bc8bda36db48333, type: 2}
   - {fileID: 11400000, guid: 30688fe1407fed843849542a2531cc56, type: 2}
-  - {fileID: 11400000, guid: d61104641f3202a48b671bf80c679484, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: da7848c74b64f944c9888a68bf169fcf, type: 2}
   terrain: {fileID: 68628882}
   terrace: 0.00001
@@ -178,6 +178,7 @@ MonoBehaviour:
   name: battfield
   painter: {fileID: 68628885}
   changeColor: 0
+  vNoise: {fileID: 68628886}
 --- !u!154 &68628881
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -268,7 +269,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain: {fileID: 68628882}
   vNoise: {fileID: 68628886}
-  blendDistance: 10
+  blendDistance: 1000
+  sortedList:
+  - {x: 290.92014, y: 413.93726, z: 2}
+  - {x: 434.93506, y: 254.79404, z: 0}
+  - {x: 379.06732, y: 237.71506, z: 0}
+  - {x: 161.13895, y: 323.61145, z: 0}
+  - {x: 408.51367, y: 43.82898, z: 1}
 --- !u!114 &68628886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,31 +288,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2ba96fa1eaf0847bb68e880504c383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfPoints: 18
+  numberOfPoints: 5
   minX: 0
   maxX: 512
   minY: 0
   maxY: 512
   sphereHeight: 300
   currentPoints:
-  - {x: 105.58563, y: 380.35535, z: 1}
-  - {x: 325.54883, y: 477.54718, z: 1}
-  - {x: 381.10284, y: 236.11404, z: 0}
-  - {x: 89.21289, y: 373.0581, z: 3}
-  - {x: 315.57663, y: 371.0169, z: 3}
-  - {x: 146.97073, y: 394.23004, z: 1}
-  - {x: 17.172668, y: 100.552, z: 1}
-  - {x: 485.35107, y: 356.66907, z: 1}
-  - {x: 356.9109, y: 20.404175, z: 1}
-  - {x: 19.921692, y: 248.2717, z: 3}
-  - {x: 276.5331, y: 401.94427, z: 0}
-  - {x: 479.38013, y: 223.1752, z: 2}
-  - {x: 392.74316, y: 51.244568, z: 3}
-  - {x: 209.28256, y: 330.0428, z: 2}
-  - {x: 384.5528, y: 439.79132, z: 3}
-  - {x: 214.79037, y: 475.73877, z: 3}
-  - {x: 314.52322, y: 186.32309, z: 0}
-  - {x: 176.1318, y: 186.03812, z: 0}
+  - {x: 290.92014, y: 413.93726, z: 2}
+  - {x: 379.06732, y: 237.71506, z: 0}
+  - {x: 408.51367, y: 43.82898, z: 1}
+  - {x: 161.13895, y: 323.61145, z: 0}
+  - {x: 434.93506, y: 254.79404, z: 0}
   randomizePoints: 0
 --- !u!1 &705507993
 GameObject:

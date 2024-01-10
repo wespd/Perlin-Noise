@@ -17,14 +17,17 @@ public class PaintSolidColor : MonoBehaviour
 
 
     public List<Vector3> sortedList = new();
+
+    public int[,] biomeValues;
     public void SetColors () {      
         // Get a reference to the terrain dat
         // Splatmap data is stored internally as a 3d array of floats, so declare a new empty array ready for your custom splatmap data:
         splatmapData = new float[terrainData.alphamapWidth, terrainData.alphamapHeight, terrainData.alphamapLayers];
+        biomeValues = new int[terrainData.alphamapWidth, terrainData.alphamapHeight];
         Debug.Log("set colors ran");
-        for (int y = 0; y < terrainData.alphamapHeight; y++)
+        for (int x = 0; x < terrainData.alphamapHeight; x++)
         {
-            for (int x = 0; x < terrainData.alphamapWidth; x++)
+            for (int y = 0; y < terrainData.alphamapWidth; y++)
             {
                 float[] splatWeights = new float[terrainData.alphamapLayers];
                 float distance = 999;
@@ -35,6 +38,8 @@ public class PaintSolidColor : MonoBehaviour
                 int colorOfPoint = (int)sortedList[0].z;
                 int colorOfSecondPoint = (int)sortedList[1].z;
                 int[] distancesRelativeToClosestPoint;
+                int biomeValue = (int)sortedList[0].z;
+                biomeValues[x,y] = biomeValue;
                 /*distancesRelativeToClosestPoint.Add(1);
                 for(int i = 1; i < sortedList.Count; i++)
                 {
@@ -58,10 +63,6 @@ public class PaintSolidColor : MonoBehaviour
                 else
                 {
                     splatmapData[x,y,colorOfPoint] = 1f;
-                }
-                if(x == 0)
-                {
-                    Debug.Log(splatmapData[x,y,colorOfPoint] + " " + colorOfPoint);
                 }
             }
         }

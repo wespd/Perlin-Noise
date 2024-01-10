@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260bec2809ba28f4eac1ea287d80f348, type: 3}
   m_Name: messa biome
   m_EditorClassIdentifier: 
-  amplitude: 0.1
-  frequency: 2.2
-  octaves: 5
-  xPhase: 0
-  yPhase: 0
-  persistance: 0.83
-  lacunarity: 1.8
-  terrace: 0.036
+  amplitude: 0.25
+  frequency: 5
+  octaves: 3
+  xPhase: 1
+  yPhase: 1
+  persistance: 0.5
+  lacunarity: 5
+  terrace: 0.001
   cube: 0.001
