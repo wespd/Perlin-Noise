@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260bec2809ba28f4eac1ea287d80f348, type: 3}
   m_Name: basic2
   m_EditorClassIdentifier: 
-  amplitude: 0.05
-  frequency: 3
+  amplitude: 0.22
+  frequency: 2.2
   octaves: 3
   xPhase: 1
   yPhase: 1

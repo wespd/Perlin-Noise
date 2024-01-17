@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260bec2809ba28f4eac1ea287d80f348, type: 3}
   m_Name: weird biome
   m_EditorClassIdentifier: 
-  amplitude: 0.1
-  frequency: 2.2
+  amplitude: 0.24
+  frequency: 2.4
   octaves: 5
   xPhase: 0
   yPhase: 0
   persistance: 0.87
   lacunarity: 2.4
-  terrace: 0.068
-  cube: 0.9
+  terrace: 0.0001
+  cube: 0.001

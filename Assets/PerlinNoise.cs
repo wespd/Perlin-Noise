@@ -109,7 +109,7 @@ public class PerlinNoise : MonoBehaviour
     }}
     
     public bool createAsset;
-    public string name;
+    public string biomeName;
 
     public PaintSolidColor painter;
 
@@ -120,26 +120,6 @@ public class PerlinNoise : MonoBehaviour
     {
         int bounds = terrain.terrainData.heightmapResolution;
         perlinHeights = new float[bounds,bounds];
-        /*for(int x = 0; x < bounds; x++)
-        {
-            for(int y = 0; y < bounds; y++)
-            {
-                float perlinValue = 0;
-                float __amplitude = _amplitude;
-                float __frequency= _frequency;
-                for(int octave = 0; octave < _octaves; octave++)
-                {
-                    float xCord = (x/(float)bounds*__frequency) + _xPhase;
-                    float yCord = (y/(float)bounds*__frequency) + _yPhase;
-                    __frequency *= _lacunarity;
-                    perlinValue += Mathf.PerlinNoise(xCord - xCord % _cube,yCord - yCord % _cube)*__amplitude;
-                    __amplitude *= _persistance;
-                }
-                
-                perlinHeights[x,y] =  perlinValue - (perlinValue % _terrace);
-            }
-        }*/
-        //terrain.terrainData.SetHeights(0,0, perlinHeights);
         if(createAsset)
         {
             createAsset = false;
@@ -165,82 +145,52 @@ public class PerlinNoise : MonoBehaviour
         {
             for(int y = 0; y < bounds; y++)
             {
-                float perlinValue = 0;
-                int indexValue1 = (int)GetBiomeIndex(x,y).x;
-                int indexValue2 = (int)GetBiomeIndex(x,y).y;
-                float __amplitude;
-                float __frequency;
-                float __lacunarity;
-                float __cube;
-                float __persistance;
-                float __terrace;
-                int __octaves;
-                float distanceBetweenClosestPoints = Vector3.Distance(new Vector3(indexValue1, indexValue2, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(indexValue1, indexValue2, 0), new Vector3(x, y, 0));
+                List<Vector3> sortedList = GetBiomeIndex(x,y);
+                int indexValue1 = (int)sortedList[0].z;
+                int indexValue2 = (int)sortedList[1].z;
+                float distanceBetweenClosestPoints = Vector3.Distance(new Vector3(sortedList[1].x, sortedList[1].y, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(sortedList[0].x, sortedList[0].y, 0), new Vector3(x, y, 0));
                 float percent = distanceBetweenClosestPoints/(painter.blendDistance*2) + .5f;
                 if(indexValue1 != indexValue2 && distanceBetweenClosestPoints < painter.blendDistance)
                 {
-                    __amplitude = Mathf.Lerp(biomes[indexValue2].amplitude, biomes[indexValue1].amplitude, percent);
-                    __frequency= Mathf.Lerp(biomes[indexValue2].frequency, biomes[indexValue1].frequency, percent);
-                    __lacunarity = Mathf.Lerp(biomes[indexValue2].lacunarity, biomes[indexValue1].lacunarity, percent);
-                    __cube = Mathf.Lerp(biomes[indexValue2].cube, biomes[indexValue1].cube, percent);
-                    __persistance = Mathf.Lerp(biomes[indexValue2].persistance, biomes[indexValue1].persistance, percent);
-                    __terrace = Mathf.Lerp(biomes[indexValue2].terrace, biomes[indexValue1].terrace, percent);
-                    __octaves = (int)Mathf.Lerp(biomes[indexValue2].octaves, biomes[indexValue1].octaves, percent);
+                    float perlinValueOne;
+                    float perlinValueTwo;
+                    
+                    perlinValueOne  =  perlinHeight(x,y,indexValue1);
+                    
+                    perlinValueTwo  =  perlinHeight(x,y,indexValue2);
+
+                    perlinHeights[x,y] = Mathf.Lerp(perlinValueTwo, perlinValueOne, percent);
                 }
                 else
                 {
-                    __amplitude = biomes[indexValue1].amplitude;
-                    __frequency= biomes[indexValue1].frequency;
-                    __lacunarity =biomes[indexValue1].lacunarity;
-                    __cube = biomes[indexValue1].cube;
-                    __persistance =biomes[indexValue1].persistance;
-                    __terrace = biomes[indexValue1].terrace;
-                    __octaves = biomes[indexValue1].octaves;
+                    perlinHeights[x,y]  = perlinHeight(x,y,indexValue1);
                 }
                 
-                for(int octave = 0; octave < __octaves; octave++)
-                {
-                    float xCord = (x/(float)bounds*__frequency) + _xPhase;
-                    float yCord = (y/(float)bounds*__frequency) + _yPhase;
-                    __frequency *= __lacunarity;
-                    perlinValue += Mathf.PerlinNoise(xCord - xCord % __cube,yCord - yCord % __cube)*__amplitude;
-                    __amplitude *= __persistance;
-                }
-                
-                perlinHeights[x,y] =  perlinValue - (perlinValue % __terrace);
             }
         }
         terrain.terrainData.SetHeights(0,0, perlinHeights);
     }
-    public Vector2 GetBiomeIndex(int x, int y)
+    public List<Vector3> GetBiomeIndex(int x, int y)
     {
-
-        // float highest = 0;
-        // float returnValueIndex = 0;
-        // int convertedX = x/1000*512;
-        // int convertedY = y/1000*512;
-        // /*if(convertedX >= list.GetLength(0) || convertedY >= list.GetLength(1))
-        // {
-        //     Debug.Log(convertedX + " " + convertedY);
-        // }
-        // for(int i = 0; i < biomes.Length; i++)
-        // {
-        //     if(list[convertedX,convertedY,i] > highest)
-        //     {
-        //         highest = list[convertedX,convertedY,i];
-        //         returnValueIndex = i;
-        //     }
-        //     if(x == 0)
-        //     {
-        //         Debug.Log(list[convertedX,convertedY,i] + " " + i);
-        //     }
-        //     //returnValue += list[x,y,i]*i;
-        // }*/
-        // //we need to make a list that takes an x and y and stores the biome value in the painter script
-        // return painter.biomeValues[convertedX, convertedY];
         List<Vector3> sortedList = new();
         sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x,y, v.z))).ToList();
-        return new Vector2(sortedList[0].z, sortedList[1].z);
+        return sortedList;
+    }
+    public float perlinHeight(int x, int y,int index)
+    {
+        int bounds = terrain.terrainData.heightmapResolution;
+        float perlinValue = 0;
+        float __amplitude = biomes[index].amplitude;
+        float __frequency = biomes[index].frequency;
+        for(int octave = 0; octave < biomes[index].octaves; octave++)
+        {
+            float xCord = (x/(float)bounds* __frequency);
+            float yCord = (y/(float)bounds*__frequency);
+            __frequency *= biomes[index].lacunarity;
+            perlinValue += Mathf.PerlinNoise(xCord - xCord % biomes[index].cube,yCord - yCord % biomes[index].cube)*__amplitude;
+            __amplitude *= biomes[index].persistance;
+        }
+        return perlinValue - (perlinValue % biomes[index].terrace);
     }
     
     

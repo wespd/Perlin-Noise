@@ -20,4 +20,4 @@ MonoBehaviour:
   persistance: 0.73
   lacunarity: 1.3
   terrace: 0.00001
-  cube: 0.001
+  cube: 0.633

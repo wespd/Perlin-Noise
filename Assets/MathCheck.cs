@@ -2,18 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MathCheck : MonoBehaviour
 {
-    [Range(0, 10)]
-    public float value1;
-    [Range(0,10)]
-    public float value2;
+    public List<Vector2> points;
+    public float[] percents;
+    public float[] heights;
+
+    public Vector2 addedHeights;
+
     public float result;
-    public float result2;
+    //trying to figure out percentages if we want the total to add up to 1 and we use the distances of the generated points from 0,0,0
     private void OnValidate()
     {
-        result = value1 % value2;
-        result2 = value1 - result;
+        addedHeights = Vector2.zero;
+        /*heights.OrderBy(v => Vector2.Distance(v, new Vector2(0,0))).ToList();
+        foreach(Vector2 height in heights)
+        {
+            addedHeights += height;
+        }*/
+        float temp = 0;
+        for(int i = 0; i < percents.Length; i++)
+        {
+            temp += heights[i] * percents[i];
+        }
+        result = temp;
     }
 }
