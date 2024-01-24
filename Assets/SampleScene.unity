@@ -169,8 +169,8 @@ MonoBehaviour:
   biomes:
   - {fileID: 11400000, guid: ca227195b58035342bc8bda36db48333, type: 2}
   - {fileID: 11400000, guid: 30688fe1407fed843849542a2531cc56, type: 2}
-  - {fileID: 11400000, guid: d61104641f3202a48b671bf80c679484, type: 2}
   - {fileID: 11400000, guid: da7848c74b64f944c9888a68bf169fcf, type: 2}
+  - {fileID: 11400000, guid: bdc254c3c783e9b4bb6e0ba9d6237d1c, type: 2}
   terrain: {fileID: 68628882}
   terrace: 0.00001
   cube: 0.09
@@ -251,17 +251,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0ecd27c66d65f46a3a18b405f7eaf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: []
-  percents:
-  - 0.05
-  - 0.05
-  - 0.9
-  heights:
-  - 1
-  - 5
+  points:
+  - {x: 10, y: 0}
+  - {x: 10, y: 0}
+  - {x: 10, y: 0}
+  distances:
   - 10
-  addedHeights: {x: 0, y: 0}
-  result: 9.3
+  - 10
+  - 10
+  normalizedPercentages:
+  - 0.3333333
+  - 0.3333333
+  - 0.3333333
 --- !u!114 &68628885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,13 +277,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain: {fileID: 68628882}
   vNoise: {fileID: 68628886}
-  blendDistance: 200
+  blendDistance: 1000
   sortedList:
-  - {x: 506.4475, y: 321.31665, z: 0}
-  - {x: 159.84018, y: 334.72388, z: 2}
-  - {x: 360.53778, y: 74.73639, z: 0}
-  - {x: 18.484985, y: 157.69711, z: 0}
-  - {x: 67.964355, y: 59.11963, z: 0}
+  - {x: 457.3899, y: 382.55835, z: 2}
+  - {x: 333.05432, y: 416.71826, z: 2}
+  - {x: 387.01648, y: 314.4659, z: 1}
+  - {x: 148.00583, y: 425.24408, z: 1}
+  - {x: 149.59457, y: 367.17584, z: 0}
+  - {x: 98.72406, y: 292.32724, z: 2}
+  - {x: 439.92474, y: 44.27765, z: 1}
+  - {x: 268.65317, y: 104.79205, z: 1}
+  - {x: 37.25592, y: 378.489, z: 3}
+  - {x: 81.956726, y: 132.52408, z: 2}
+  - {x: 146.73886, y: 42.12982, z: 2}
+  - {x: 8.699524, y: 127.71747, z: 0}
 --- !u!114 &68628886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,18 +303,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2ba96fa1eaf0847bb68e880504c383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfPoints: 5
+  numberOfPoints: 12
   minX: 0
   maxX: 512
   minY: 0
   maxY: 512
   sphereHeight: 300
   currentPoints:
-  - {x: 218.48007, y: 387.8191, z: 1}
-  - {x: 248.29514, y: 270.1492, z: 3}
-  - {x: 396.4215, y: 58.791687, z: 3}
-  - {x: 490.78656, y: 301.48862, z: 1}
-  - {x: 148.07797, y: 5.977173, z: 0}
+  - {x: 98.72406, y: 292.32724, z: 2}
+  - {x: 439.92474, y: 44.27765, z: 1}
+  - {x: 146.73886, y: 42.12982, z: 2}
+  - {x: 149.59457, y: 367.17584, z: 0}
+  - {x: 268.65317, y: 104.79205, z: 1}
+  - {x: 37.25592, y: 378.489, z: 3}
+  - {x: 8.699524, y: 127.71747, z: 0}
+  - {x: 457.3899, y: 382.55835, z: 2}
+  - {x: 333.05432, y: 416.71826, z: 2}
+  - {x: 148.00583, y: 425.24408, z: 1}
+  - {x: 387.01648, y: 314.4659, z: 1}
+  - {x: 81.956726, y: 132.52408, z: 2}
   randomizePoints: 0
 --- !u!1 &705507993
 GameObject:
@@ -485,4 +500,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2060879275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2060879279}
+  - component: {fileID: 2060879278}
+  - component: {fileID: 2060879277}
+  - component: {fileID: 2060879276}
+  m_Layer: 0
+  m_Name: Plane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &2060879276
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060879275}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2060879277
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060879275}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6221c1d76628d374981a84e616da67c1, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &2060879278
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060879275}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &2060879279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060879275}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 500, y: 188.55, z: 500}
+  m_LocalScale: {x: 100, y: 1, z: 100}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

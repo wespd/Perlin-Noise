@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -146,25 +146,27 @@ public class PerlinNoise : MonoBehaviour
             for(int y = 0; y < bounds; y++)
             {
                 List<Vector3> sortedList = GetBiomeIndex(x,y);
-                int indexValue1 = (int)sortedList[0].z;
-                int indexValue2 = (int)sortedList[1].z;
-                float distanceBetweenClosestPoints = Vector3.Distance(new Vector3(sortedList[1].x, sortedList[1].y, 0), new Vector3(x, y, 0)) - Vector3.Distance(new Vector3(sortedList[0].x, sortedList[0].y, 0), new Vector3(x, y, 0));
-                float percent = distanceBetweenClosestPoints/(painter.blendDistance*2) + .5f;
-                if(indexValue1 != indexValue2 && distanceBetweenClosestPoints < painter.blendDistance)
+                List<Vector2> closestPoints = new();
+                for(int i = 0; i < sortedList.Count; i++)
                 {
-                    float perlinValueOne;
-                    float perlinValueTwo;
-                    
-                    perlinValueOne  =  perlinHeight(x,y,indexValue1);
-                    
-                    perlinValueTwo  =  perlinHeight(x,y,indexValue2);
-
-                    perlinHeights[x,y] = Mathf.Lerp(perlinValueTwo, perlinValueOne, percent);
+                    float distance = Vector2.Distance(new Vector2(sortedList[i].x, sortedList[i].y), new Vector2(x, y));
+                    if(distance - Vector2.Distance(new Vector2(sortedList[0].x, sortedList[0].y), new Vector2(x, y)) < painter.blendDistance)
+                    {
+                        closestPoints.Add(new Vector2(distance, sortedList[i].z));
+                    }
                 }
-                else
+                List<float> distances = new(); 
+                foreach(Vector2 point in closestPoints)
                 {
-                    perlinHeights[x,y]  = perlinHeight(x,y,indexValue1);
+                    distances.Add(point.x);
                 }
+                float[] normalizedPercents = distanceToNormalizedPercents(distances.ToArray());
+                float perlinValue = 0;
+                for(int i = 0; i < normalizedPercents.Length; i++)
+                {
+                    perlinValue += perlinHeight(x,y,(int)closestPoints[i].y) * normalizedPercents[i];
+                }
+                perlinHeights[x,y] = perlinValue; 
                 
             }
         }
@@ -173,7 +175,7 @@ public class PerlinNoise : MonoBehaviour
     public List<Vector3> GetBiomeIndex(int x, int y)
     {
         List<Vector3> sortedList = new();
-        sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x,y, v.z))).ToList();
+        sortedList = vNoise.currentPoints.OrderBy(v => Vector3.Distance(v, new Vector3(x/1000*512,y/1000*512, v.z))).ToList();
         return sortedList;
     }
     public float perlinHeight(int x, int y,int index)
@@ -191,6 +193,14 @@ public class PerlinNoise : MonoBehaviour
             __amplitude *= biomes[index].persistance;
         }
         return perlinValue - (perlinValue % biomes[index].terrace);
+    }
+    public float[] distanceToNormalizedPercents(float[] distances)
+    {
+        float[] percents = distances.Select(d => 1 / d).ToArray();
+
+        float sum = percents.Sum();
+        float[] normalizedPercentages = percents.Select(p => p / sum).ToArray();
+        return normalizedPercentages;
     }
     
     
